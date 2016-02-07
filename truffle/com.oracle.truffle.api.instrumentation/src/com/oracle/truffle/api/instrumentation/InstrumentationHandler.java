@@ -53,10 +53,12 @@ import com.oracle.truffle.api.source.SourceSection;
 /**
  * Central coordinator class for the Truffle instrumentation framework. Allocated once per engine.
  */
-final class InstrumentationHandler {
+public final class InstrumentationHandler {
 
     /* Enable trace output to stdout. */
     private static final boolean TRACE = Boolean.getBoolean("truffle.instrumentation.trace");
+
+    private static InstrumentationHandler handler;
 
     /* All roots that were initialized (executed at least once) */
     private final Map<RootNode, Void> roots = Collections.synchronizedMap(new WeakHashMap<RootNode, Void>());
@@ -82,6 +84,16 @@ final class InstrumentationHandler {
         this.out = out;
         this.err = err;
         this.in = in;
+        handler = this;
+    }
+
+    public static void insertInstrumentationWrapper(Node instrumentableNode) {
+        insertInstrumentationWrapper(instrumentableNode, instrumentableNode.getSourceSection());
+    }
+
+    public static void insertInstrumentationWrapper(Node instrumentableNode, SourceSection sourceSection) {
+        assert handler != null : "InstrumentationHandler not yet initialized";
+        handler.insertWrapper(instrumentableNode, sourceSection);
     }
 
     void installRootNode(RootNode root) {
