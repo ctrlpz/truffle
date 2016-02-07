@@ -254,6 +254,7 @@ public final class SourceSection {
         result = prime * result + ((source == null) ? 0 : source.hashCode());
         result = prime * result + startColumn;
         result = prime * result + startLine;
+        result = prime * result + Arrays.hashCode(tags);
         return result;
     }
 
@@ -295,7 +296,7 @@ public final class SourceSection {
         if (startLine != other.startLine) {
             return false;
         }
-        return true;
+        return Arrays.equals(tags, other.tags);
     }
 
     /**
