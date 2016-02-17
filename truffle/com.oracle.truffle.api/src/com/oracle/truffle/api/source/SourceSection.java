@@ -119,6 +119,15 @@ public final class SourceSection {
     }
 
     /**
+     * Returns a set of tags that are associated with this source section as array. The returned
+     * array must be considered read-only. All elements of the array were asserted to be non-null
+     * and interned for faster comparison.
+     */
+    public String[] getTags() {
+        return tags;
+    }
+
+    /**
      * Representation of the source program that contains this section.
      *
      * @return the source object
