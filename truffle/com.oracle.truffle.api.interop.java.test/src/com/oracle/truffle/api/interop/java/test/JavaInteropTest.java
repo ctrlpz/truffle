@@ -179,8 +179,8 @@ public class JavaInteropTest {
         private final Object[] args;
 
         @SuppressWarnings("rawtypes")
-        public TemporaryRoot(Class<? extends TruffleLanguage> lang, Node foreignAccess, TruffleObject function, Object... args) {
-            super(lang, null, null);
+        TemporaryRoot(Class<? extends TruffleLanguage> lang, Node foreignAccess, TruffleObject function, Object... args) {
+            super(lang, null);
             this.foreignAccess = foreignAccess;
             this.function = function;
             this.args = args;

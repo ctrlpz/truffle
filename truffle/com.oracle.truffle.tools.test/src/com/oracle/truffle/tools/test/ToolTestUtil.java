@@ -250,7 +250,7 @@ public class ToolTestUtil {
         @Child private ToolTestLangNode leftChild;
         @Child private ToolTestLangNode rightChild;
 
-        public TestAdditionNode(TestValueNode leftChild, TestValueNode rightChild, SourceSection s) {
+        TestAdditionNode(TestValueNode leftChild, TestValueNode rightChild, SourceSection s) {
             super(s);
             this.leftChild = insert(leftChild);
             this.rightChild = insert(rightChild);
@@ -275,8 +275,8 @@ public class ToolTestUtil {
          * newly created AST. Global registry is not used, since that would interfere with other
          * tests run in the same environment.
          */
-        public InstrumentationTestRootNode(ToolTestLangNode body) {
-            super(ToolTestLang.class, null, null);
+        InstrumentationTestRootNode(ToolTestLangNode body) {
+            super(ToolTestLang.class, null);
             this.body = body;
         }
 
@@ -307,8 +307,8 @@ public class ToolTestUtil {
          * newly created AST. Global registry is not used, since that would interfere with other
          * tests run in the same environment.
          */
-        public TestRootNode(ToolTestLangNode body, Instrumenter instrumenter) {
-            super(ToolTestLang.class, null, null);
+        TestRootNode(ToolTestLangNode body, Instrumenter instrumenter) {
+            super(ToolTestLang.class, null);
             this.instrumenter = instrumenter;
             this.body = body;
         }

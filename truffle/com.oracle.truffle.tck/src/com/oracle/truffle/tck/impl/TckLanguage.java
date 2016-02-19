@@ -106,8 +106,8 @@ public final class TckLanguage extends TruffleLanguage<Env> {
     private static final class MultiplyNode extends RootNode implements TruffleObject, ForeignAccess.Factory {
         private final Source code;
 
-        public MultiplyNode(Source toParse) {
-            super(TckLanguage.class, null, null);
+        MultiplyNode(Source toParse) {
+            super(TckLanguage.class, null);
             this.code = toParse;
         }
 
