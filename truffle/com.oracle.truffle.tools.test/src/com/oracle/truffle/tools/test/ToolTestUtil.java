@@ -51,7 +51,7 @@ public class ToolTestUtil {
 
     static final String MIME_TYPE = "text/x-toolTest";
 
-    static enum ToolTestTag implements SyntaxTag {
+    enum ToolTestTag implements SyntaxTag {
 
         ADD_TAG("addition", "test language addition node"),
 
@@ -60,7 +60,7 @@ public class ToolTestUtil {
         private final String name;
         private final String description;
 
-        private ToolTestTag(String name, String description) {
+        ToolTestTag(String name, String description) {
             this.name = name;
             this.description = description;
         }
@@ -186,7 +186,7 @@ public class ToolTestUtil {
         @Child private ToolTestLangNode child;
         @Child private EventHandlerNode eventHandlerNode;
 
-        public ToolTestWrapperNode(ToolTestLangNode child) {
+        ToolTestWrapperNode(ToolTestLangNode child) {
             super(null);
             assert !(child instanceof ToolTestWrapperNode);
             this.child = child;
@@ -232,7 +232,7 @@ public class ToolTestUtil {
     static class TestValueNode extends ToolTestLangNode {
         private final int value;
 
-        public TestValueNode(int value, SourceSection s) {
+        TestValueNode(int value, SourceSection s) {
             super(s);
             this.value = value;
         }
