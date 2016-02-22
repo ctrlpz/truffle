@@ -93,7 +93,14 @@ public final class InstrumentationHandler {
 
     public static void insertInstrumentationWrapper(Node instrumentableNode, SourceSection sourceSection) {
         assert globalHandler != null : "InstrumentationHandler not yet initialized";
-        globalHandler.insertWrapper(instrumentableNode, sourceSection);
+
+        Node node;
+        if (instrumentableNode instanceof WrapperNode) {
+            node = ((WrapperNode) instrumentableNode).getDelegateNode();
+        } else {
+            node = instrumentableNode;
+        }
+        globalHandler.insertWrapper(node, sourceSection);
     }
 
     void installRootNode(RootNode root) {
@@ -266,6 +273,7 @@ public final class InstrumentationHandler {
 
     @SuppressWarnings("unchecked")
     private void insertWrapper(Node instrumentableNode, SourceSection sourceSection) {
+        assert !(instrumentableNode instanceof WrapperNode);
         Node node = instrumentableNode;
         Node parent = node.getParent();
         if (parent instanceof WrapperNode) {
