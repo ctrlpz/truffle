@@ -49,6 +49,8 @@ public abstract class RootNode extends Node {
     private RootCallTarget callTarget;
     @CompilationFinal private FrameDescriptor frameDescriptor;
 
+    @CompilationFinal private SourceSection sourceSection;
+
     /**
      * Creates new root node. Each {@link RootNode} is associated with a particular language - if
      * the root node represents a method it is assumed the method is written in such language.
@@ -66,9 +68,12 @@ public abstract class RootNode extends Node {
         this(language, sourceSection, frameDescriptor, true);
     }
 
-    @SuppressWarnings("deprecation")
+    protected RootNode(Class<? extends TruffleLanguage> language, FrameDescriptor frameDescriptor) {
+        this(language, null, frameDescriptor, true);
+    }
+
     private RootNode(Class<? extends TruffleLanguage> language, SourceSection sourceSection, FrameDescriptor frameDescriptor, boolean checkLanguage) {
-        super(sourceSection);
+        this.sourceSection = sourceSection;
         if (checkLanguage) {
             if (!TruffleLanguage.class.isAssignableFrom(language)) {
                 throw new IllegalStateException();
