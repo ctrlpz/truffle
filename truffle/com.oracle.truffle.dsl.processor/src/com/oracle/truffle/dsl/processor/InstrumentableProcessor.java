@@ -78,6 +78,7 @@ public final class InstrumentableProcessor extends AbstractProcessor {
 
     // API name assumptions
     private static final String METHOD_GET_NODE_COST = "getCost";
+    private static final String METHOD_GET_SOURCE_SECTION = "getSourceSection";
     private static final String METHOD_ON_RETURN_EXCEPTIONAL = "onReturnExceptional";
     private static final String METHOD_ON_RETURN_VALUE = "onReturnValue";
     private static final String METHOD_ON_ENTER = "onEnter";
@@ -318,6 +319,13 @@ public final class InstrumentableProcessor extends AbstractProcessor {
             wrapperType.add(getInstrumentationTags);
         }
 
+        if (isOverrideableOrUndeclared(sourceType, METHOD_GET_SOURCE_SECTION)) {
+            TypeMirror returnType = context.getType(SourceSection.class);
+            CodeExecutableElement getSourceSection = new CodeExecutableElement(ElementUtils.modifiers(Modifier.PUBLIC), returnType, METHOD_GET_SOURCE_SECTION);
+            getSourceSection.createBuilder().startReturn().string(FIELD_DELEGATE + ".getSourceSection()").end();
+            wrapperType.add(getSourceSection);
+        }
+
         List<ExecutableElement> wrappedExecuteMethods = new ArrayList<>();
         List<? extends Element> elementList = context.getEnvironment().getElementUtils().getAllMembers(sourceType);
         for (ExecutableElement method : ElementFilter.methodsIn(elementList)) {
@@ -335,7 +343,7 @@ public final class InstrumentableProcessor extends AbstractProcessor {
             if (methodName.startsWith(EXECUTE_METHOD_PREFIX)) {
                 wrappedExecuteMethods.add(method);
             } else {
-                if (modifiers.contains(Modifier.ABSTRACT) && !methodName.equals("getSourceSection") //
+                if (modifiers.contains(Modifier.ABSTRACT) && !methodName.equals(METHOD_GET_SOURCE_SECTION) //
                                 && !methodName.equals(METHOD_GET_NODE_COST)) {
                     emitError(sourceType, String.format("Unable to implement unknown abstract method %s in generated wrapper node.", ElementUtils.createReferenceName(method)));
                     return null;
