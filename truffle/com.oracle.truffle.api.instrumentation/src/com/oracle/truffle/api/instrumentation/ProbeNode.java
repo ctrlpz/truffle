@@ -82,6 +82,10 @@ public final class ProbeNode extends Node {
         this.context = new EventContext(this, sourceSection);
     }
 
+    public boolean isValid() {
+        return version != null && version.isValid();
+    }
+
     /**
      * Should get invoked before the node is invoked.
      *

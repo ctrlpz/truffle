@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.oracle.truffle.api.CallTarget;
+import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 import com.oracle.truffle.api.instrumentation.InstrumentableFactory.WrapperNode;
 import com.oracle.truffle.api.nodes.Node;
@@ -48,7 +50,7 @@ import com.oracle.truffle.api.source.SourceSection;
 public final class EventContext {
 
     private final ProbeNode probeNode;
-    private final SourceSection sourceSection;
+    @CompilationFinal private SourceSection sourceSection;
 
     EventContext(ProbeNode probeNode, SourceSection sourceSection) {
         this.sourceSection = sourceSection;
@@ -60,20 +62,26 @@ public final class EventContext {
      * final for each {@link EventContext} instance.
      *
      * <p>
-     * <b>Performance note:</b> this is method may be invoked in compiled code and is guaranteed to
-     * always return a compilation constant .
+     * <b>Performance note:</b> this method may be invoked in compiled code and is guaranteed to
+     * always return a compilation constant.
      * </p>
      */
     public SourceSection getInstrumentedSourceSection() {
-        return sourceSection;
+        if (probeNode.isValid()) {
+            return sourceSection;
+        } else {
+            CompilerDirectives.transferToInterpreter();
+            WrapperNode wrapper = (WrapperNode) probeNode.getParent();
+            return wrapper.getDelegateNode().getSourceSection();
+        }
     }
 
     /**
      * Accessor to the instrumented node at which the event occurred. The returned AST must not be
      * mutated by the user.
      * <p>
-     * <b>Performance note:</b> this is method may be invoked in compiled code and is guaranteed to
-     * always return a compilation constant .
+     * <b>Performance note:</b> this method may be invoked in compiled code and is guaranteed to
+     * always return a compilation constant.
      * </p>
      */
     public Node getInstrumentedNode() {
