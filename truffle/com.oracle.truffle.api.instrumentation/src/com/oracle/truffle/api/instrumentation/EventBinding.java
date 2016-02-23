@@ -104,4 +104,8 @@ public final class EventBinding<T> {
         this.disposed = true;
     }
 
+    @Override
+    public String toString() {
+        return "EventBinding: filter=" + filter.toString();
+    }
 }
