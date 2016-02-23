@@ -298,7 +298,6 @@ public final class SourceSection {
         result = prime * result + ((source == null) ? 0 : source.hashCode());
         result = prime * result + startColumn;
         result = prime * result + startLine;
-        result = prime * result + Arrays.hashCode(tags);
         return result;
     }
 
@@ -340,16 +339,6 @@ public final class SourceSection {
         }
         if (startLine != other.startLine) {
             return false;
-        }
-
-        String[] otherTags = other.tags;
-        if (tags.length != otherTags.length) {
-            return false;
-        }
-        for (int i = 0; i < tags.length; i++) {
-            if (tags[i] != otherTags[i]) {
-                return false;
-            }
         }
         return true;
     }
