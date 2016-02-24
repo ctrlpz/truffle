@@ -274,6 +274,17 @@ public abstract class REPLHandler {
         }
     };
 
+    public static final REPLHandler RUN_HANDLER = new REPLHandler(REPLMessage.RUN) {
+
+        @Override
+        REPLMessage[] receive(REPLMessage request, REPLServer replServer) {
+            replServer.run();
+            REPLMessage reply = createReply();
+            System.out.println("RUN");
+            return finishReplySucceeded(reply, "run completed");
+        }
+    };
+
     public static final REPLHandler CALL_HANDLER = new REPLHandler(REPLMessage.CALL) {
 
         @Override

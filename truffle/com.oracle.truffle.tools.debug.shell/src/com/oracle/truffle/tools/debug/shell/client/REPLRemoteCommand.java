@@ -147,6 +147,23 @@ public abstract class REPLRemoteCommand extends REPLCommand {
         }
     };
 
+    public static final REPLRemoteCommand RUN_CMD = new REPLRemoteCommand("run", null, "execute program based on command-line arguments") {
+
+        private final String[] help = {"run: executes program based on command-line arguments"};
+
+        @Override
+        public String[] getHelp() {
+            return help;
+        }
+
+        @Override
+        protected REPLMessage createRequest(REPLClientContext context, String[] args) {
+            REPLMessage request = new REPLMessage();
+            request.put(REPLMessage.OP, REPLMessage.RUN);
+            return request;
+        }
+    };
+
     public static final REPLRemoteCommand CALL_CMD = new REPLRemoteCommand("call", null, "call a method/function") {
 
         private final String[] help = {"call <name> <args>: calls a function by name"};

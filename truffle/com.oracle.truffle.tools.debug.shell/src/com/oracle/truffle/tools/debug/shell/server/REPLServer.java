@@ -53,6 +53,7 @@ import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.source.SourceSection;
 import com.oracle.truffle.api.vm.EventConsumer;
 import com.oracle.truffle.api.vm.PolyglotEngine;
+import com.oracle.truffle.api.vm.PolyglotEngine.Builder;
 import com.oracle.truffle.api.vm.PolyglotEngine.Language;
 import com.oracle.truffle.api.vm.PolyglotEngine.Value;
 import com.oracle.truffle.tools.debug.shell.REPLMessage;
@@ -114,7 +115,11 @@ public final class REPLServer {
     private Map<Integer, BreakpointInfo> breakpoints = new WeakHashMap<>();
 
     public REPLServer(String defaultMIMEType) {
-        this.engine = PolyglotEngine.newBuilder().onEvent(onHalted).onEvent(onExec).build();
+        this(defaultMIMEType, PolyglotEngine.newBuilder());
+    }
+
+    public REPLServer(String defaultMIMEType, Builder builder) {
+        this.engine = builder.onEvent(onHalted).onEvent(onExec).build();
         this.db = Debugger.find(this.engine);
         engineLanguages.addAll(engine.getLanguages().values());
         if (engineLanguages.size() == 0) {
@@ -189,6 +194,7 @@ public final class REPLServer {
         add(REPLHandler.KILL_HANDLER);
         add(REPLHandler.LOAD_HANDLER);
         add(REPLHandler.QUIT_HANDLER);
+        add(REPLHandler.RUN_HANDLER);
         add(REPLHandler.SET_BREAK_CONDITION_HANDLER);
         add(REPLHandler.SET_LANGUAGE_HANDLER);
         add(REPLHandler.STEP_INTO_HANDLER);
@@ -213,6 +219,15 @@ public final class REPLServer {
 
     public LocationPrinter getLocationPrinter() {
         return locationPrinter;
+    }
+
+    void run() {
+        try {
+            engine.eval(Source.fromNamedText("", "START").withMimeType(getLanguage().getMimeTypes().iterator().next()));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     void haltedAt(SuspendedEvent event) {

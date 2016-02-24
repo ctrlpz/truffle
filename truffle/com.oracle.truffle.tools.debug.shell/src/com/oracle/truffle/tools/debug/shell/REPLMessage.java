@@ -100,6 +100,7 @@ public final class REPLMessage {
     public static final String OPTION = "option";
     public static final String QUIT = "quit";
     public static final String REPEAT = "repeat";
+    public static final String RUN = "run";
     public static final String SET = "set";
     public static final String SET_BREAK_CONDITION = "set-breakpoint-condition";
     public static final String SET_LANGUAGE = "set-language";
