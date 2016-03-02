@@ -55,7 +55,7 @@ public abstract class ExecutionEventNode extends Node {
     }
 
     /**
-     * Invoked immediatly after an {@link EventContext#getInstrumentedNode() instrumented node} is
+     * Invoked immediately after an {@link EventContext#getInstrumentedNode() instrumented node} is
      * successfully executed. The order in which multiple event listeners are notified matches the
      * order they are
      * {@link Instrumenter#attachListener(SourceSectionFilter, ExecutionEventListener) attached}.
