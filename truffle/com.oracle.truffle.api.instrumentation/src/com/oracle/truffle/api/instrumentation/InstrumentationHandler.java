@@ -97,10 +97,11 @@ public final class InstrumentationHandler {
         Node node;
         if (instrumentableNode instanceof WrapperNode) {
             node = ((WrapperNode) instrumentableNode).getDelegateNode();
+            invalidateWrapperImpl((WrapperNode) instrumentableNode, node);
         } else {
             node = instrumentableNode;
+            globalHandler.insertWrapper(node, sourceSection);
         }
-        globalHandler.insertWrapper(node, sourceSection);
     }
 
     void installRootNode(RootNode root) {
