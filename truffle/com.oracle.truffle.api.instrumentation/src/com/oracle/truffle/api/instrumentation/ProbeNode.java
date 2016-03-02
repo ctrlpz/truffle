@@ -198,7 +198,7 @@ public final class ProbeNode extends Node {
             assert element instanceof ExecutionEventNodeFactory;
             ExecutionEventNode eventNode = createEventNode(binding, element);
             if (eventNode == null) {
-                // error occured creating the event node
+                // error occurred creating the event node
                 return null;
             }
             next = new EventProviderChainNode(binding, eventNode);
