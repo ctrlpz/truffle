@@ -253,9 +253,8 @@ public final class SourceSection {
         if (source == null) {
             return kind + ": " + identifier;
         } else {
-
             return "source=" + source.getShortName() + " pos=" + charIndex + " len=" + charLength + " line=" + startLine + " col=" + startColumn +
-                            (identifier != null ? " identifier=" + identifier : "") + "tags=" + Arrays.toString(tags) + " code=" + getCode();
+                            (identifier != null ? " identifier=" + identifier : "") + " tags=" + Arrays.toString(tags) + " code=" + getCode();
         }
     }
 
