@@ -59,13 +59,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import com.oracle.truffle.api.Assumption;
-import com.oracle.truffle.api.CompilerAsserts;
-import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.api.*;
 import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.Scope;
-import com.oracle.truffle.api.Truffle;
 import com.oracle.truffle.api.debug.Breakpoint.BreakpointConditionFailure;
 import com.oracle.truffle.api.debug.DebuggerNode.InputValuesProvider;
 import com.oracle.truffle.api.frame.FrameDescriptor;
@@ -75,16 +71,9 @@ import com.oracle.truffle.api.frame.FrameInstanceVisitor;
 import com.oracle.truffle.api.frame.FrameSlot;
 import com.oracle.truffle.api.frame.MaterializedFrame;
 import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.instrumentation.EventBinding;
-import com.oracle.truffle.api.instrumentation.EventContext;
-import com.oracle.truffle.api.instrumentation.ExecutionEventNode;
-import com.oracle.truffle.api.instrumentation.ExecutionEventNodeFactory;
-import com.oracle.truffle.api.instrumentation.ProbeNode;
-import com.oracle.truffle.api.instrumentation.SourceSectionFilter;
-import com.oracle.truffle.api.instrumentation.TruffleInstrument;
+import com.oracle.truffle.api.instrumentation.*;
 import com.oracle.truffle.api.instrumentation.SourceSectionFilter.Builder;
 import com.oracle.truffle.api.instrumentation.StandardTags.RootTag;
-import com.oracle.truffle.api.instrumentation.Tag;
 import com.oracle.truffle.api.nodes.ExecutableNode;
 import com.oracle.truffle.api.nodes.LanguageInfo;
 import com.oracle.truffle.api.nodes.Node;
@@ -475,6 +464,12 @@ public final class DebuggerSession implements Closeable {
     public void prepareStepUntilNext(Class<? extends Tag> tag, SuspendAnchor anchor, Thread thread) {
         StepConfig stepConfig = StepConfig.newBuilder().tag(tag, anchor).build();
         SteppingStrategy strat = SteppingStrategy.createStepNext(this, stepConfig);
+        setSteppingStrategy(thread, strat, true);
+    }
+
+    public void prepareStepEndTurn(Thread thread, final Node node, String messageSelector, ArrayList<RootNode> stackFrames) {
+        StepConfig stepConfig = StepConfig.newBuilder().tag(StandardTags.RootTag.class, SuspendAnchor.AFTER).build();
+        SteppingStrategy strat = SteppingStrategy.createStepEndTurn(this, stepConfig, node, messageSelector, stackFrames);
         setSteppingStrategy(thread, strat, true);
     }
 
