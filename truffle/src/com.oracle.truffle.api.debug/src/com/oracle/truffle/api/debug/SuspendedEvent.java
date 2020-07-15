@@ -160,7 +160,7 @@ public final class SuspendedEvent {
         this.sourceSection = context.getInstrumentedSourceSection();
     }
 
-    boolean isDisposed() {
+    public boolean isDisposed() {
         return disposed;
     }
 

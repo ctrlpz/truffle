@@ -758,7 +758,7 @@ abstract class SteppingStrategy {
                 if(frame.getSourceSection().equals(sourceSection) || isNonMethodCall) {
                     //if the frame does not corresponds to a method call we need to check for the next frame
                     RootNode nextFrame = rootNodeFrames.get(index);
-                    if (nextFrame != null && nextFrame.getName()!= null) { //frame corresponding to actor executor
+                    if (nextFrame != null && nextFrame.getName()!= null) { //frame corresponding to executor root node
                         if (nextFrame.getName().contains(">>#λ")) { //TODO check if this condition is sufficient?
                             isNonMethodCall = true;
                         } else {
